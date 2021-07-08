@@ -36,3 +36,11 @@ inline static Vec8f ToScaledFloat( Vec8i _32bits, Vec8f scaleFull, Vec8f scaleHa
     Vec8i tmp = _32bits & float_mantissaMask | float_exponentMask;
     return _mm256_fmsub_ps( reinterpret_f( tmp ), scaleHalf, scaleFull );
 }
+
+inline static uint_t GetIndex( float_v sample, float_v keys )
+{
+    auto mask = _mm256_cmp_ps( keys, sample, _CMP_LE_OS );
+    uint_t bits = _mm256_movemask_ps( mask );
+    bits = ~bits;
+    return _tzcnt_u32( bits );
+}
