@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="VectorLib">
+      <UniqueIdentifier>{e3775305-3d35-4735-a902-858179f33093}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PreCompileHeader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="instrset.h">
+      <Filter>VectorLib</Filter>
+    </ClInclude>
+    <ClInclude Include="vector_convert.h">
+      <Filter>VectorLib</Filter>
+    </ClInclude>
+    <ClInclude Include="vectorclass.h">
+      <Filter>VectorLib</Filter>
+    </ClInclude>
+    <ClInclude Include="vectorf128.h">
+      <Filter>VectorLib</Filter>
+    </ClInclude>
+    <ClInclude Include="vectorf256.h">
+      <Filter>VectorLib</Filter>
+    </ClInclude>
+    <ClInclude Include="vectorf256e.h">
+      <Filter>VectorLib</Filter>
+    </ClInclude>
+    <ClInclude Include="vectorf512.h">
+      <Filter>VectorLib</Filter>
+    </ClInclude>
+    <ClInclude Include="vectorf512e.h">
+      <Filter>VectorLib</Filter>
+    </ClInclude>
+    <ClInclude Include="vectori128.h">
+      <Filter>VectorLib</Filter>
+    </ClInclude>
+    <ClInclude Include="vectori256.h">
+      <Filter>VectorLib</Filter>
+    </ClInclude>
+    <ClInclude Include="vectori256e.h">
+      <Filter>VectorLib</Filter>
+    </ClInclude>
+    <ClInclude Include="vectori512.h">
+      <Filter>VectorLib</Filter>
+    </ClInclude>
+    <ClInclude Include="vectori512e.h">
+      <Filter>VectorLib</Filter>
+    </ClInclude>
+    <ClInclude Include="vectori512s.h">
+      <Filter>VectorLib</Filter>
+    </ClInclude>
+    <ClInclude Include="vectori512se.h">
+      <Filter>VectorLib</Filter>
+    </ClInclude>
+    <ClInclude Include="vectormath_common.h">
+      <Filter>VectorLib</Filter>
+    </ClInclude>
+    <ClInclude Include="vectormath_exp.h">
+      <Filter>VectorLib</Filter>
+    </ClInclude>
+    <ClInclude Include="vectormath_hyp.h">
+      <Filter>VectorLib</Filter>
+    </ClInclude>
+    <ClInclude Include="vectormath_lib.h">
+      <Filter>VectorLib</Filter>
+    </ClInclude>
+    <ClInclude Include="vectormath_trig.h">
+      <Filter>VectorLib</Filter>
+    </ClInclude>
+    <ClInclude Include="ProbabilityGenerator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineRng.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IMemory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CanonicalMemory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectHeader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PreCompileHeader.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectLib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineSampler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
