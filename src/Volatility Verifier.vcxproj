@@ -175,14 +175,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CanonicalMemory.h" />
     <ClInclude Include="EngineRng.h" />
     <ClInclude Include="EngineSampler.h" />
-    <ClInclude Include="IMemory.h" />
     <ClInclude Include="instrset.h" />
     <ClInclude Include="PreCompileHeader.h" />
-    <ClInclude Include="ProbabilityGenerator.h" />
-    <ClInclude Include="Engine.h" />
     <ClInclude Include="ProjectHeader.h" />
     <ClInclude Include="ProjectLib.h" />
     <ClInclude Include="Source.h" />

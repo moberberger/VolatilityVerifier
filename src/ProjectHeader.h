@@ -19,3 +19,7 @@ typedef Vec8ui uint_v;
 #define MaxPopVectorCount (MaxPopCount / VecElementCount)
 
 #include "ProjectLib.h"
+
+#include "EngineRng.h"
+#include "EngineSampler.h"
+#include "Timer.h"

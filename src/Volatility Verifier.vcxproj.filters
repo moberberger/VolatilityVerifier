@@ -86,22 +86,10 @@
     <ClInclude Include="vectormath_trig.h">
       <Filter>VectorLib</Filter>
     </ClInclude>
-    <ClInclude Include="ProbabilityGenerator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="EngineRng.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="IMemory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Timer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CanonicalMemory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ProjectHeader.h">
