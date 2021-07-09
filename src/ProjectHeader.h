@@ -5,10 +5,15 @@
 
 
 typedef float float_t;
-typedef unsigned int uint_t;
-
+typedef float_t* float_p;
 typedef Vec8f float_v;
+typedef float_v* float_vp;
+
+
+typedef unsigned int uint_t;
+typedef uint_t* uint_p;
 typedef Vec8ui uint_v;
+typedef uint_v* uint_vp;
 
 
 

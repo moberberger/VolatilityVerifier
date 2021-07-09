@@ -28,13 +28,20 @@ inline static void ClearMem( T& obj )
     memset( &obj, 0, sizeof( T ) );
 }
 
-inline static Vec8f ToScaledFloat( Vec8i _32bits, Vec8f scaleFull, Vec8f scaleHalf )
-{
-    const Vec8i float_mantissaMask = 0x007fffff;
-    const Vec8i float_exponentMask = 0x40000000;
 
-    Vec8i tmp = _32bits & float_mantissaMask | float_exponentMask;
-    return _mm256_fmsub_ps( reinterpret_f( tmp ), scaleHalf, scaleFull );
+inline static float_v ToUnscaledFloat( uint_v as32bits )
+{
+    const uint_v float_mantissaMask = 0x007fffff;
+    const uint_v float_exponentMask = 0x40000000;
+
+    uint_v tmp = as32bits & float_mantissaMask | float_exponentMask;
+    return reinterpret_f( tmp );
+}
+
+inline static float_v ToScaledFloat( uint_v _32bits, float_v scaleHalf, float_v scaleFull )
+{
+    auto asFloats = ToUnscaledFloat( _32bits );
+    return _mm256_fmsub_ps( asFloats, scaleHalf, scaleFull );
 }
 
 inline static uint_t GetIndex( float_v sample, float_v keys )
@@ -44,3 +51,20 @@ inline static uint_t GetIndex( float_v sample, float_v keys )
     bits = ~bits;
     return _tzcnt_u32( bits );
 }
+
+class XorShift
+{
+    uint_v state;
+public:
+    XorShift() { SlowRng( state ); }
+
+    void Next( float_vp dest )
+    {
+        uint_p buf = (uint_p) dest;
+ 
+        for (size_t i = 0; i < 8; i++)
+            _rdrand32_step( buf++ );
+
+        *dest = ToScaledFloat( reinterpret_i(*dest), 0.5f, 1.0f );
+    }
+};
