@@ -58,13 +58,12 @@ class XorShift
 public:
     XorShift() { SlowRng( state ); }
 
-    void Next( float_vp dest )
+    void Next( float_p dest )
     {
-        uint_p buf = (uint_p) dest;
- 
-        for (size_t i = 0; i < 8; i++)
-            _rdrand32_step( buf++ );
+        state ^= state << 13;
+        state ^= state >> 17;
+        state ^= state << 5;
 
-        *dest = ToScaledFloat( reinterpret_i(*dest), 0.5f, 1.0f );
+        *(float_vp) dest = ToScaledFloat( state, 0.5f, 1.0f );
     }
 };

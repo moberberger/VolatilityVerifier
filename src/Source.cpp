@@ -4,8 +4,14 @@
 #include "Source.h"
 
 
-float_t Values[8] = { 0, 1, 2, 100, 1000 };
-float_t Probabilities[8] = { -1.0f, .1f, .1f, .002f, .00045f, 0, 0, 0 };
+size_t PopulationSize = 1000000;
+size_t iterations = 10000;
+
+float_t Values[8] = { 0, 1, 2, 10, 100, 1000, 0, 0 };
+float_t Probabilities[8] = { 0.7889999f, .10f, .10f, .01f, .001f, .0000001f, 0, 0 };
+
+//float_t Values[8] = { 0, 1, 5, 10, 25 };
+//float_t Probabilities[8] = { 0.15f, .40f, .20f, .15f, .10f, 0, 0, 0 };
 
 float_t Confidence = 0.95f;
 float_t ZScoreForConfidence = 1.95996f;
@@ -13,46 +19,39 @@ float_t ZScoreForConfidence = 1.95996f;
 float_t ConfidenceIntervals[] = { .80f, .90f, .95f, .98f, .99f, .999f };
 float_t ZScores[] = { 1.281552f, 1.644854f, 1.95996f, 2.32635f, 2.57583f, 3.2905f };
 
+float_t TheoreticalValue;
+float_t Stdev;
 
-float_t Setup()
+void Setup()
 {
-    size_t count = 0, autosumIdx = -1;
-    float_t sumPV = 0, sumP = 0;
+    size_t count = 0;
+    float_t sumV = 0, sumP = 0;
+    TheoreticalValue = 0;
+
     for (size_t i = 0; i < 8; i++)
     {
         if (Probabilities[i] > 0)
         {
             count++;
             sumP += Probabilities[i];
-            sumPV += Probabilities[i] * Values[i];
+            sumV += Values[i];
+            TheoreticalValue += Probabilities[i] * Values[i];
         }
-        else if (Probabilities[i] < 0)
-            autosumIdx = i; // multiples silently fail
     }
 
-    if (autosumIdx >= 0) // sumP dependent on ENTIRE previous loop
-    {
-        auto autoSum = 1.0f - sumP;
-        Probabilities[autosumIdx] = autoSum;
-
-        count++;
-        sumP += autoSum;
-        sumPV += Probabilities[autosumIdx] * Values[autosumIdx];
-    }
-
-    float_t mean = sumPV / count;
-    float_t stdev = 0;
+    float_t mean = sumV / count;
     for (size_t i = 0; i < 8; i++)
     {
         if (Probabilities[i] > 0)
         {
-            auto val = Probabilities[i] * Values[i];
-            auto diff = val - mean;
-            stdev += diff * diff;
+            auto delta = Values[i] - mean;
+            delta *= delta;
+            auto val = Probabilities[i] * delta;
+            Stdev += val;
         }
     }
-    stdev = sqrtf( stdev / (count - 1) );
-    return stdev;
+    Stdev = sqrtf( Stdev );
+    printf( "stdev: %f\n\n", Stdev );
 }
 
 float_v GetProbabilitiesAsKeys()
@@ -69,48 +68,75 @@ float_v GetProbabilitiesAsKeys()
 
 
 
+float_t GetRtp( float_v& keys )
+{
+    XorShift rng;
+    float_t randomNumbers[8];
+
+    float_t counts[8] = { 0,0,0,0,0,0,0,0 };
+
+    for (size_t i = 0; i < PopulationSize / 8; i++)
+    {
+        rng.Next( randomNumbers );
+        for (size_t j = 0; j < 8; j++)
+        {
+            auto sample = randomNumbers[j];
+            auto index = GetIndex( sample, keys );
+            counts[index]++;
+        }
+    }
+
+    float_v vValues = *(float_vp) Values;
+    float_v vCounts = *(float_vp) counts;
+    float_v product = vCounts * vValues;
+    float_t dotP = horizontal_add( product );
+    float_t sumCounts = horizontal_add( vCounts );
+    float_t rtp = dotP / sumCounts;
+
+    return rtp;
+}
+
+
 
 
 
 int main( int _ac, char** av )
 {
-    uint_t counts[8] = { 0,0,0,0,0,0,0,0 };
-    XorShift rng;
+    Setup();
 
-    auto stdev = Setup();
+    float_t volIdx = ZScoreForConfidence * Stdev / sqrtf( (float) PopulationSize );
+    printf( "Volatility Index VI = %f\n", volIdx );
+
+    volIdx *= 0.01;
+    printf( "        Modified VI = %f\n", volIdx );
+
+    float_t mean = TheoreticalValue;
+    printf( "Theoretical Mean = %f\n", mean );
 
     float_v probKeys = GetProbabilitiesAsKeys();
-    float_v vRandomNumbers;
-    float_p randomNumbers = (float_p) &vRandomNumbers;
 
-    for (size_t i = 0; i < 1000000; i++)
+    int count = 0;
+    int countBad = 0;
+
+    for (size_t i = 0; i < 10000; i++)
     {
-        rng.Next( &vRandomNumbers );
-        for (size_t j = 0; j < 8; j++)
-        {
-            auto sample = randomNumbers[j];
-            auto index = GetIndex( sample, probKeys );
-            counts[index]++;
-        }
+        float_t rtp = GetRtp( probKeys );
+        count++;
+        if (rtp < mean - volIdx || rtp > mean + volIdx)
+            countBad++;
     }
 
-    uint_t sumCounts = 0;
-    for (size_t i = 0; i < 8; i++)
-        sumCounts += counts[i];
+    printf( "Count    : %d\n", count );
+    printf( "Count Bad: %d\n", countBad );
 
-    double sum = 0;
-    for (size_t i = 0; i < 8; i++)
-    {
-        double x = (double) Values[i] * counts[i];
-        sum += x;
+    // double sum = 0; for (size_t i = 0; i 8; i++) { double x = (double) Values[i] * counts[i];
+    // sum += x;
 
-        double percent = 100.0 * counts[i] / (double) sumCounts;
-        printf( "(%lf%%)   %lf x %d = %lf\n", percent, Values[i], counts[i], x );
-    }
+    // double percent = 100.0 * counts[i] / (double) sumCounts; printf( "(%lf%%) %lf x %d =
+    // %lf\n", percent, Values[i], counts[i], x ); }
 
-    printf( "\nCounts = %d\nTotal = %lf\n\n", sumCounts, sum / sumCounts );
+    // printf( "\nCounts = %d\nTotal = %lf\n\n", sumCounts, sum / sumCounts );
 
-    printf( "stdev: %f\n\n", stdev );
     printf( "< Press Any Key >" );
     _getch();
     return 42;
